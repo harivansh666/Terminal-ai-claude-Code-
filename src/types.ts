@@ -7,7 +7,7 @@ export type AssistantMessage = {
   role: "assistant";
   content: string;
   usage: Usage;
-  stop_reson: StopReason;
+  stop_reason: StopReason;
 };
 
 export type Message = UserMessage | AssistantMessage;

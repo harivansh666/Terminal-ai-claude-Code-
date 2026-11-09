@@ -1,10 +1,8 @@
 import dotenv from "dotenv";
-import { GoogleGenAI } from "@google/genai";
 import { parseArgs } from "node:util";
+import { createProvider } from "./models/gemini.js";
 
 dotenv.config();
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
 const { values } = parseArgs({
   options: {
@@ -18,22 +16,14 @@ if (!values.prompt) {
   process.exit(1);
 }
 
-const interaction = await ai.interactions.create({
-  model: "gemini-3.8-flash",
-  input: values.prompt,
-  generation_config: {
-    temperature: 0.9,
-    max_output_tokens: 255,
-  },
-  stream: true,
-});
+const provider = createProvider();
+const model = values.model ?? provider.defaultModel;
 
-for await (const event of interaction) {
-  if (event.event_type === "step.delta") {
-    if (event.delta.type === "text") {
-      process.stdout.write(event.delta.text);
-    }
+for await (const event of provider.stream({
+  messages: [{ role: "user", content: values.prompt }],
+  model,
+})) {
+  if (event.type === "text_delta") {
+    process.stdout.write(event.delta);
   }
 }
-
-console.log(values);
