@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { parseArgs } from "node:util";
 import { getProvider } from "./models/index.js";
+import type { Message } from "./types.js";
 
 dotenv.config();
 
@@ -18,13 +19,15 @@ if (!values.prompt) {
 }
 
 const provider = getProvider(values.provider);
-const model = values.model ?? provider.defaultModel;
+const selectedModel = values.model ?? provider.defaultModel;
+const messages: Message[] = [{ role: "user", content: values.prompt }];
 
 for await (const event of provider.stream({
-  messages: [{ role: "user", content: values.prompt }],
-  model,
+  messages,
+  model: selectedModel,
 })) {
   if (event.type === "text_delta") {
     process.stdout.write(event.delta);
   }
 }
+process.stdout.write("\n");

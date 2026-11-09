@@ -31,3 +31,8 @@ export function getProvider(name: string = "gemini"): Provider {
 
   return factory();
 }
+
+/**
+ * Convenient alias for getProvider.
+ */
+export const getModel = getProvider;
