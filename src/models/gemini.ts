@@ -69,7 +69,7 @@ export function createProvider(): Provider {
         ...(options.system ? { system_instruction: options.system } : {}),
         generation_config: {
           temperature: 0.9,
-          max_output_tokens: 1024,
+          max_output_tokens: 200,
         },
         stream: true,
       });

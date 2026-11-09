@@ -28,6 +28,11 @@ for await (const event of provider.stream({
 })) {
   if (event.type === "text_delta") {
     process.stdout.write(event.delta);
+  } else {
+    const { content, role, usage, stop_reason } = event.message;
+    console.log(
+      `\n\nFinal Message:\n- content: ${content}\n- role: ${role}\n- usage: (input: ${usage.input}, output: ${usage.output})\n- stop_reason: ${stop_reason}`,
+    );
   }
 }
 process.stdout.write("\n");
