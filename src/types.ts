@@ -9,25 +9,29 @@ export type ToolCallBlock = {
   arguments: Record<string, unknown>;
 };
 
-export type contentBlock = TextBlock | ToolCallBlock;
+export type ContentBlock = TextBlock | ToolCallBlock;
 
 export type UserMessage = { role: "user"; content: string };
+
 export type AssistantMessage = {
   role: "assistant";
-  content: contentBlock[];
+  content: ContentBlock[];
   usage: Usage;
   stop_reason: StopReason;
 };
 
-export type toolCallResult = {
-  role: "roolResult";
+export type ToolResultMessage = {
+  role: "toolResult";
   toolCallId: string;
+  toolName: string;
   result: string;
   isError: boolean;
 };
-export type Message = UserMessage | AssistantMessage;
 
-export type ToolSpec = { name: string; description: string };
+export type Message = UserMessage | AssistantMessage | ToolResultMessage;
+
+export type ToolSpec = { name: string; description: string, parameters: any };
+
 export type Tool = ToolSpec & {
   execute(args: Record<string, unknown>): Promise<string>;
 };
@@ -36,9 +40,9 @@ export type Tool = ToolSpec & {
 
 export type StreamType =
   | {
-      type: "text_delta";
-      delta: string;
-    }
+    type: "text_delta";
+    delta: string;
+  }
   | { type: "done"; message: AssistantMessage };
 
 export type StreamOptions = {
