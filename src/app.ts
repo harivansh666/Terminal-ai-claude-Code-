@@ -4,6 +4,8 @@ import { getProvider } from "./models/index.js";
 import { readTool } from "./tools/read-tool.js";
 import type { Message, Tool, ToolCallBlock, ToolResultMessage } from "./types.js";
 
+// pnpm dev -p "can you tell me what is written in .gitignore"
+
 dotenv.config();
 
 const { values } = parseArgs({
