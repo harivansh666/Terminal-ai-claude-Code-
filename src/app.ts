@@ -12,9 +12,9 @@ dotenv.config();
 
 const { values } = parseArgs({
   options: {
-    prompt:   { type: "string",  short: "p" },
-    provider: { type: "string",  default: "gemini" },
-    model:    { type: "string",  short: "m", default: "gemini-3.8-flash" },
+    prompt: { type: "string", short: "p" },
+    provider: { type: "string", default: "gemini" },
+    model: { type: "string", short: "m", default: "gemini-3.8-flash" },
   },
 });
 
@@ -31,9 +31,9 @@ const provider = getProvider(values.provider!);
 
 const exitReason = await runAgentLoop({
   provider,
-  model:    values.model ?? provider.defaultModel,
+  model: values.model ?? provider.defaultModel,
   messages: [{ role: "user", content: values.prompt }],
-  tools:    [readTool],
+  tools: [readTool],
 
   // Text stream as it arrives
   onText: (delta) => process.stdout.write(delta),
@@ -52,3 +52,5 @@ process.stdout.write("\n");
 if (exitReason === "error" || exitReason === "max_turns") {
   process.exit(1);
 }
+
+// 4:06
