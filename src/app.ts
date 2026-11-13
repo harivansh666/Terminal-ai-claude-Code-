@@ -3,6 +3,7 @@ import { parseArgs } from "node:util";
 import { runAgentLoop } from "./agent/loop.js";
 import { getProvider } from "./models/index.js";
 import { readTool } from "./tools/read-tool.js";
+import { bashTool } from "./tools/bash.js";
 
 dotenv.config();
 
@@ -33,7 +34,7 @@ const exitReason = await runAgentLoop({
   provider,
   model: values.model ?? provider.defaultModel,
   messages: [{ role: "user", content: values.prompt }],
-  tools: [readTool],
+  tools: [readTool, bashTool],
 
   // Text stream as it arrives
   onText: (delta) => process.stdout.write(delta),
